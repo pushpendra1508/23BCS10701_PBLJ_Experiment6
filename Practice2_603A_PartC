@@ -1,0 +1,57 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Product {
+    String name;
+    double price;
+    String category;
+
+    // Constructor
+    public Product(String name, double price, String category) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
+
+    // Getters
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+    public String getCategory() { return category; }
+
+    @Override
+    public String toString() {
+        return "Product{name='" + name + "', price=" + price + ", category='" + category + "'}";
+    }
+}
+
+public class PartC {
+    public static void main(String[] args) {
+        List<Product> products = Arrays.asList(
+            new Product("Laptop", 1200, "Electronics"),
+            new Product("TV", 800, "Electronics"),
+            new Product("Shirt", 50, "Clothing"),
+            new Product("Jeans", 60, "Clothing"),
+            new Product("Smartphone", 900, "Electronics"),
+            new Product("Shoes", 70, "Footwear")
+        );
+
+        // Group products by category
+        Map<String, List<Product>> groupedByCategory = products.stream()
+            .collect(Collectors.groupingBy(Product::getCategory));
+
+        System.out.println("Grouped by category: " + groupedByCategory);
+
+        // Find the most expensive product in each category
+        Map<String, Optional<Product>> mostExpensiveInCategory = products.stream()
+            .collect(Collectors.groupingBy(Product::getCategory, 
+                    Collectors.maxBy(Comparator.comparingDouble(Product::getPrice))));
+
+        System.out.println("Most expensive product in each category: " + mostExpensiveInCategory);
+
+        // Calculate the average price of all products
+        double averagePrice = products.stream()
+            .collect(Collectors.averagingDouble(Product::getPrice));
+
+        System.out.println("Average price of all products: " + averagePrice);
+    }
+}
